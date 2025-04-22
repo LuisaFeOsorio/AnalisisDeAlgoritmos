@@ -6,51 +6,30 @@ import java.util.concurrent.TimeUnit;
 
 public class Principal {
 
-    @FunctionalInterface
-    interface Ordenador { void ordenar(int[] a); }
-
-    // Para no colgar con algoritmos super‑lentos
     private static final int UMBRAL_LENTO = 50_000;
 
     public static void main(String[] args) {
         try {
             generarArchivos();
-            int[] tamaños = {10_000, 100_000, 1_000_000};
-            Map<String, Ordenador> algoritmos = new LinkedHashMap<>();
-            algoritmos.put("Bubble Sort", a -> AlgoritmosDeOrdenamiento.bubbleSort(a));
-            algoritmos.put("Quick Sort",  a -> AlgoritmosDeOrdenamiento.quickSort(a, 0, a.length - 1));
-            algoritmos.put("Stooge Sort", a -> AlgoritmosDeOrdenamiento.stoogeSort(a, 0, a.length - 1));
-            algoritmos.put("Radix Sort",  a -> AlgoritmosDeOrdenamiento.radixSort(a));
-            algoritmos.put("Merge Sort",  a -> AlgoritmosDeOrdenamiento.mergeSort(a, 0, a.length - 1));
-            algoritmos.put("Bitonic Sort",a -> AlgoritmosDeOrdenamiento.bitonicSort(a));
+            int[] tamaños = {10000, 100000, 1000000};
 
             System.out.println("Pruebas de ordenamiento (tiempos en ms)\n");
 
             for (int n : tamaños) {
                 String archivo = "datos" + n + ".txt";
-                System.out.printf(">>> n = %,d elementos (archivo: %s)%n", n, archivo);
 
+                // Línea modificada aquí:
+                System.out.println(">>> n = " + n + " elementos (archivo: " + archivo + ")");
 
                 int[] original = leerArreglo(archivo);
 
-                for (Map.Entry<String,Ordenador> entry : algoritmos.entrySet()) {
-                    String nombre = entry.getKey();
-                    Ordenador ord = entry.getValue();
+                ejecutar("Bubble Sort", original, n);
+                ejecutar("Quick Sort", original, n);
+                ejecutar("Stooge Sort", original, n);
+                ejecutar("Radix Sort", original, n);
+                ejecutar("Merge Sort", original, n);
+                ejecutar("Bitonic Sort", original, n);
 
-                    if ((nombre.equals("Bubble Sort") || nombre.equals("Stooge Sort"))
-                            && n > UMBRAL_LENTO) {
-                        System.out.printf("%-12s : omitir para n > %,d%n", nombre, UMBRAL_LENTO);
-                        continue;
-                    }
-
-                    int[] copia = Arrays.copyOf(original, original.length);
-                    long t0 = System.nanoTime();
-                    ord.ordenar(copia);
-                    long t1 = System.nanoTime();
-                    long ms = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
-
-                    System.out.printf("%-12s : %,6d ms%n", nombre, ms);
-                }
                 System.out.println();
             }
 
@@ -59,36 +38,66 @@ public class Principal {
         }
     }
 
+    private static void ejecutar(String nombre, int[] original, int n) {
+        if ((nombre.equals("Bubble Sort") || nombre.equals("Stooge Sort")) && n > UMBRAL_LENTO) {
+            System.out.printf("%-12s : omitir para n > %,d%n", nombre, UMBRAL_LENTO);
+            return;
+        }
 
-    private static void generarArchivos() throws IOException {
-        generarArchivo("datos10000.txt",  10_000);
-        generarArchivo("datos100000.txt", 100_000);
-        generarArchivo("datos1000000.txt",1_000_000);
+        int[] copia = Arrays.copyOf(original, original.length);
+        long t0 = System.nanoTime();
+
+        if (nombre.equals("Bubble Sort")) {
+            AlgoritmosDeOrdenamiento.bubbleSort(copia);
+        } else if (nombre.equals("Quick Sort")) {
+            AlgoritmosDeOrdenamiento.quickSort(copia, 0, copia.length - 1);
+        } else if (nombre.equals("Stooge Sort")) {
+            AlgoritmosDeOrdenamiento.stoogeSort(copia, 0, copia.length - 1);
+        } else if (nombre.equals("Radix Sort")) {
+            AlgoritmosDeOrdenamiento.radixSort(copia);
+        } else if (nombre.equals("Merge Sort")) {
+            AlgoritmosDeOrdenamiento.mergeSort(copia, 0, copia.length - 1);
+        } else if (nombre.equals("Bitonic Sort")) {
+            AlgoritmosDeOrdenamiento.bitonicSort(copia);
+        }
+
+        long t1 = System.nanoTime();
+        long ms = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
+
+        System.out.printf("%-12s : %,6d ms%n", nombre, ms);
     }
 
+    private static void generarArchivos() throws IOException {
+        generarArchivo("datos10000.txt", 10000);
+        generarArchivo("datos100000.txt", 100000);
+        generarArchivo("datos1000000.txt", 1000000);
+    }
 
     private static void generarArchivo(String nombre, int cantidad) throws IOException {
         File f = new File(nombre);
         if (f.exists()) return;
-        Random rnd = new Random(12345);      // semilla fija
+        Random rnd = new Random(12345);
         try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
             for (int i = 0; i < cantidad; i++) {
-                int num8 = rnd.nextInt(90_000_000) + 10_000_000; // de 10_000_000 a 99_999_999
+                int num8 = rnd.nextInt(90000000) + 10000000;
                 pw.println(num8);
             }
             System.out.println("Archivo creado: " + nombre);
         }
     }
 
-
     private static int[] leerArreglo(String nombreArchivo) throws IOException {
-        List<Integer> lista = new ArrayList<>();
-        try (Scanner sc = new Scanner(new File(nombreArchivo))) {
-            while (sc.hasNextInt()) {
-                lista.add(sc.nextInt());
-            }
-        }
+        Scanner sc = new Scanner(new File(nombreArchivo));
+        int[] datos = new int[1000000];
+        int n = 0;
 
-        return lista.stream().mapToInt(i -> i).toArray();
+        while (sc.hasNextInt()) {
+            datos[n++] = sc.nextInt();
+        }
+        sc.close();
+
+        int[] resultado = new int[n];
+        System.arraycopy(datos, 0, resultado, 0, n);
+        return resultado;
     }
 }

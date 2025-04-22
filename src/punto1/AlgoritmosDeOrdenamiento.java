@@ -17,7 +17,7 @@ public class AlgoritmosDeOrdenamiento {
                 }
     }
 
-    // 2. Quick Sort           Θ(n·log n) promedio
+
 // https://www.geeksforgeeks.org/quick-sort/
     public static void quickSort(int[] a, int lo, int hi) {
         if (lo < hi) {
@@ -43,7 +43,7 @@ public class AlgoritmosDeOrdenamiento {
         return i + 1;
     }
 
-    // 3. Stooge Sort         Θ(n^2.709)
+
 // https://www.geeksforgeeks.org/stooge-sort/
     public static void stoogeSort(int[] a, int i, int j) {
         if (a[i] > a[j]) {
@@ -59,7 +59,7 @@ public class AlgoritmosDeOrdenamiento {
         }
     }
 
-    // 4. Radix Sort          Θ(d·(n + k))
+
 // https://www.geeksforgeeks.org/radix-sort/
     public static void radixSort(int[] a) {
         int max = Arrays.stream(a).max().getAsInt();
@@ -99,7 +99,7 @@ public class AlgoritmosDeOrdenamiento {
         while (j < n2) a[k++] = R[j++];
     }
 
-    // 6. Bitonic Sort        Θ(n·log² n) (secuencial)
+
 // https://en.wikipedia.org/wiki/Bitonic_sorter
     public static void bitonicSort(int[] a) {
         int n = a.length, size = 1;
