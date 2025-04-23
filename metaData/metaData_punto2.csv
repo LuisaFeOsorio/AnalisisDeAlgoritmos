@@ -1,0 +1,13 @@
+Algoritmo,tam_array,Tiempo(ms)
+Lineal,10000,2.093856
+Binaria,10000,0.01772
+Ternaria,10000,0.05951
+Saltos,10000,0.160782
+Lineal,100000,3.426177
+Binaria,100000,0.0092
+Ternaria,100000,0.00753
+Saltos,100000,0.0415
+Lineal,1000000,4.766488
+Binaria,1000000,0.00815
+Ternaria,1000000,0.00915
+Saltos,1000000,0.09972

@@ -3,7 +3,8 @@ package punto2;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+
+import metodosMetaData.CreacionMetaData;
 
 public class Principal {
 
@@ -25,28 +26,40 @@ public class Principal {
                 System.out.printf(">>> n = %,d elementos (archivo: %s)%n", n, archivo);
 
                 // Búsqueda Lineal
+                String name_l = "Lineal";
                 long t0 = System.nanoTime();
                 int posLineal = AlgoritmosDeBusqueda.busquedaLineal(arreglo, valorBuscado);
                 long t1 = System.nanoTime();
                 imprimirTiempo("Lineal", posLineal, t0, t1);
+                String DataLineal= CreacionMetaData.crearDATA(name_l,posLineal+1,t0,t1);
+                CreacionMetaData.grabarDATA_p2(DataLineal);
 
                 // Búsqueda Binaria
+                String name_b = "Binaria";
                 t0 = System.nanoTime();
                 int posBinaria = AlgoritmosDeBusqueda.busquedaBinaria(arreglo, valorBuscado);
                 t1 = System.nanoTime();
                 imprimirTiempo("Binaria", posBinaria, t0, t1);
+                String DataBinaria= CreacionMetaData.crearDATA(name_b,posBinaria+1,t0,t1);
+                CreacionMetaData.grabarDATA_p2(DataBinaria);
 
                 // Búsqueda Ternaria
+                String name_t = "Ternaria";
                 t0 = System.nanoTime();
                 int posTernaria = AlgoritmosDeBusqueda.busquedaTernaria(arreglo, valorBuscado);
                 t1 = System.nanoTime();
                 imprimirTiempo("Ternaria", posTernaria, t0, t1);
+                String DataTernaria= CreacionMetaData.crearDATA(name_t,posTernaria+1,t0,t1);
+                CreacionMetaData.grabarDATA_p2(DataTernaria);
 
                 // Búsqueda por Saltos
+                String name_s = "Saltos";
                 t0 = System.nanoTime();
                 int posSaltos = AlgoritmosDeBusqueda.busquedaPorSaltos(arreglo, valorBuscado);
                 t1 = System.nanoTime();
                 imprimirTiempo("Saltos", posSaltos, t0, t1);
+                String DataSaltos= CreacionMetaData.crearDATA(name_s,posSaltos+1,t0,t1);
+                CreacionMetaData.grabarDATA_p2(DataSaltos);
 
                 System.out.println();
             }

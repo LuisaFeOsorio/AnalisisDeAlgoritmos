@@ -1,5 +1,7 @@
 package punto1;
 
+import metodosMetaData.CreacionMetaData;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -38,9 +40,11 @@ public class Principal {
         }
     }
 
-    private static void ejecutar(String nombre, int[] original, int n) {
+    private static void ejecutar(String nombre, int[] original, int n) throws IOException {
         if ((nombre.equals("Bubble Sort") || nombre.equals("Stooge Sort")) && n > UMBRAL_LENTO) {
             System.out.printf("%-12s : omitir para n > %,d%n", nombre, UMBRAL_LENTO);
+
+
             return;
         }
 
@@ -65,6 +69,10 @@ public class Principal {
         long ms = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
 
         System.out.printf("%-12s : %,6d ms%n", nombre, ms);
+
+        //-----------RECOPILACIÓN DE DATOS PARA GRAFICACR---------
+        String Data = CreacionMetaData.crearDATA(nombre,(original.length),0,(ms*1000000));
+        CreacionMetaData.grabarDATA_p1(Data);
     }
 
     private static void generarArchivos() throws IOException {
